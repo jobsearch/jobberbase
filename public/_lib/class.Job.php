@@ -512,9 +512,35 @@ class Job
 		}
 		return $jobs;
 	}
+	//get company jobs by type
+public function CountJobsOfCompany($company, $type)
+	{
+		global $db;
+		
+		$conditionis = '';
+	 	
+		if ($type)
+		{
+			if (!is_numeric($type))
+			{
+				$type_id = $this->GetTypeId($type);
+			}
+			else
+			{
+				$type_id = $type;
+			}
+			
+			$conditionis .= ' AND type_id = ' . $type_id;
+		}
 
+		$sql = 'SELECT COUNT(id) AS total FROM '.DB_PREFIX.'jobs WHERE company LIKE "%' . $db->real_escape_string($company) .'%" AND is_temp = 0 AND is_active = 1' . $conditionis;
+ 
+		$result = $db->query($sql);
+		$row = $result->fetch_assoc();
+		return $row['total'];
+	}
 	// Get all jobs published by a company
-	public function ApiGetJobsByCompany($company = false, $limit = false, $for_feed = false)
+	public function ApiGetJobsByCompany($type_id = false, $company = false, $limit = false, $for_feed = false, $startIndex = false, $numberOfJobsToGet = false)
 	{
 		global $db;
 		

@@ -1,5 +1,6 @@
 <?php
-	$category_var_name = $id;
+  $category_id = '';
+  $category_var_name = $id;
 	if ($category_var_name != 'all')
 	{
 		$category = get_category_by_var_name($category_var_name);
@@ -66,8 +67,8 @@
 	$smarty->assign('spamReportStatisticalData', $spamReportStatisticalData);
 	$smarty->assign('jobs', $the_jobs);
 	$smarty->assign('jobs_count', $jobsCount);
-	$smarty->assign('types', get_types());
-	$smarty->assign('current_category', $category_var_name);
+  $smarty->assign('types', get_types_with_jobs($category_id,false,false,false));	
+  $smarty->assign('current_category', $category_var_name);
 	$smarty->assign('current_category_name', ($category != 'all' ? $category['name'] : 'all categories'));
 
 	$template = 'category.tpl';

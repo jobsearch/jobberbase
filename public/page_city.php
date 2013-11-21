@@ -1,5 +1,18 @@
 <?php
-	$type_id = get_type_id_by_varname($extra);
+  $type_var_name = '';
+  $type_id = 0;
+	$typeName = null;
+  $typeName = '';
+  $paginatorLink = '';
+
+if ($extra)
+	{
+		$type_var_name = $extra;
+	}
+	if ($type_var_name != '')
+	{
+		$type_id = get_type_id_by_varname($type_var_name);
+	}
 	
 	$city_ascii_name = urldecode($id);
 	
@@ -10,6 +23,7 @@
 		$city_id = $city['id'];
 		
 		$jobCount =  $job->GetJobsCountForCity($city_id, $type_id);
+        $typeName = get_type_name_by_id($type_id);
 		$smarty->assign('jobs_count', $jobCount);
 	}
 	else
@@ -18,11 +32,12 @@
 		exit;
 	}
 	
-	$paginatorLink = BASE_URL . URL_JOBS_IN_CITY . "/$city_ascii_name";
-	
-	if (isset($extra))
-		$paginatorLink .= "/$extra";
-		
+		$paginatorLink = BASE_URL . URL_JOBS_IN_CITY . "/$city_ascii_name/";
+
+
+	if (!empty($type_var_name)){
+		$paginatorLink .= "$extra/";
+		}
 	$paginator = new Paginator($jobCount, JOBS_PER_PAGE, @$_REQUEST['p']);
 	$paginator->setLink($paginatorLink);
 	$paginator->paginate();
@@ -35,7 +50,7 @@
 	$smarty->assign("pages",$paginator->pages_link);
 
 	$smarty->assign('jobs', $the_jobs);
-	$smarty->assign('types', get_types());
+	$smarty->assign('types', get_types_with_jobs(false,$city_id,false,false));
 	$smarty->assign('city_name', $city['name']);
 	$smarty->assign('city_ascii_name', $city_ascii_name);
 

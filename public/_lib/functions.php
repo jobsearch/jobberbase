@@ -346,8 +346,42 @@ function get_city_by_id($cityID)
 function get_types()
 {
 	global $db;
-	$sql = 'SELECT id, name, var_name 
+	$sql = 'SELECT id, name, var_name  
 		FROM '.DB_PREFIX.'types ';
+	$result = $db->query($sql);
+	$types = array();
+	while($row = $result->fetch_assoc())
+	{
+		$types[] = array('id' => $row['id'], 'name' => $row['name'], 'var_name' => $row['var_name']);
+	}
+	return $types;
+}
+
+// this function gets available job types depending on page you are visting, so types not available are not displayed by default
+function get_types_with_jobs($category_id = false, $city_id = false, $company = false, $tag = false)
+{
+	global $db;
+	$conditions = '';
+		if ($company)
+		{
+			$conditions .= ' j.company LIKE "%' . addslashes($db->real_escape_string($company)) . '%" and';
+		}
+		if ($category_id)
+		{
+			$conditions .= ' j.category_id = ' .$category_id . ' and';
+		}
+		if (is_numeric($city_id) && $city_id != 0)
+		{
+			$conditions .= ' j.city_id = ' .$city_id . ' and';
+		}
+    if (is_numeric($city_id) && $city_id == 0)		
+    {
+			$conditions .= ' j.city_id IS NULL and';
+		}
+		
+	$sql = 'SELECT id, name, var_name 
+		FROM '.DB_PREFIX.'types t
+		                   WHERE EXISTS (SELECT 1 FROM '.DB_PREFIX.'jobs j where' . $conditions .' j.type_id = t.id and j.is_active = 1 and j.is_temp = 0)';
 	$result = $db->query($sql);
 	$types = array();
 	while($row = $result->fetch_assoc())
@@ -417,6 +451,19 @@ function get_category_by_id($id)
 		$category = build_category_from_result_set_row($row);
 	
 	return $category;
+}
+
+function get_type_name_by_id($id)
+{
+	global $db;
+	$sql = 'SELECT name FROM '.DB_PREFIX.'types WHERE 
+		id = '.$id;
+	$result = $db->query($sql);
+	$row = $result->fetch_assoc();
+ 
+	if ($row)
+		return $row['name'];
+	return false;
 }
 
 function build_category_from_result_set_row($row)
