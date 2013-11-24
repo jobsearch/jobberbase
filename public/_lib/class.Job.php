@@ -37,8 +37,8 @@ class Job
 	var $mUrlTitle = false;
 	var $mApplyOnline = false;
 	var $mCategoryName = false;
-	var	$mClosedOn = false;
-	var	$mDaysOld = false;
+	var $mClosedOn = false;
+	var $mDaysOld = false;
 	var $mIsSpotlight = false;
 	var $mMySqlDate = false;
 	
@@ -133,9 +133,9 @@ class Job
 	public function GetBasicInfoAdmin()
 	{
 		$job = array('id' => $this->mId,
-			         'type_id' => $this->mTypeId,
-			         'category_id' => $this->mCategoryId,
- 			         'category_name' => $this->mCategoryName,
+			                 'type_id' => $this->mTypeId,
+			                 'category_id' => $this->mCategoryId,
+ 			                 'category_name' => $this->mCategoryName,
 					 'company' => stripslashes($this->mCompany),
 					 'url' => stripslashes($this->mUrl),
 					 'title' => stripslashes($this->mTitle),
@@ -557,7 +557,21 @@ public function CountJobsOfCompany($company, $type)
 			// job was posted more than 10 minutes ago
 			$conditions .= ' AND DATE_SUB(NOW(), INTERVAL 10 MINUTE) > created_on';
 		}
+		 // if $type_id is, in fact, the type's var_name, 
+		// get the type's id
+		if (!is_numeric($type_id))
+		{
+			$type_id = $this->GetTypeId($type_id);
+		}
 		
+		if (is_numeric($type_id) && $type_id != 0)
+		{
+			$conditions .= ' AND type_id = ' . $type_id;
+		}
+		if($numberOfJobsToGet > 0)
+			$sql_limit = ' ORDER BY created_on DESC limit ' . $startIndex . ',' . $numberOfJobsToGet;
+		else
+			$sql_limit = '';
 		if($limit > 0)
 			$sql_limit = 'LIMIT ' . $limit;
 		else
