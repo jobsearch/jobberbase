@@ -247,7 +247,7 @@
 	// get job categories and cities
 	$smarty->assign('categories', get_categories());
 	$smarty->assign('settings_categories', $jobber_settings->GetSettingsCategories());
-
+  $smarty->assign('categories_with_jobs', get_categories_with_jobs());
 	// get menus
 	$smarty->assign('menus', get_menus());
 

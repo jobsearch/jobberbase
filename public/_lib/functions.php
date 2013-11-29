@@ -70,6 +70,21 @@ function get_cloud_tag_height($numberOfItems)
 	
 	return $tag_height;
 }
+function get_categories_with_jobs()
+{
+    global $db;
+    $categories = array();
+    $sql = 'SELECT *
+                   FROM '.DB_PREFIX.'categories categ
+                   WHERE EXISTS (SELECT 1 FROM '.DB_PREFIX.'jobs j where j.category_id = categ.id and j.is_active = 1)
+                   ORDER BY categ.category_order ASC';
+    $result = $db->query($sql);
+    while ($row = $result->fetch_assoc())
+    {
+        $categories[] = array('id' => $row['id'], 'name' => $row['name'], 'var_name' => $row['var_name'], 'title' => $row['title'], 'description' => $row['description'], 'keywords' => $row['keywords']);
+    }
+    return $categories;
+}
 
 function get_categories()
 {

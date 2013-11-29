@@ -43,9 +43,9 @@
 			<ul id="navmain">
             	<li class="first">Categories
 					<ul>
-						{section name=tmp loop=$categories}
-							<li id="{$categories[tmp].var_name}" {if $current_category == $categories[tmp].var_name}class="selected"{/if}><a href="{$BASE_URL}{$URL_JOBS}/{$categories[tmp].var_name}/" title="{$categories[tmp].name}">{$categories[tmp].name}<span>({$categories[tmp].categ_count})</span></a></li>
-						{/section}
+					 {section name=tmp loop=$categories_with_jobs}
+              <li id="{$categories_with_jobs[tmp].var_name}" {if $current_category == $categories_with_jobs[tmp].var_name}class="selected"{/if}><a href="{$BASE_URL}{$URL_JOBS}/{$categories_with_jobs[tmp].var_name}/" title="{$categories_with_jobs[tmp].name}"><span>{$categories_with_jobs[tmp].name}</span></a></li>
+           {/section}
 					</ul>
                 </li>
                 <li>Getting Started

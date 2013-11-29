@@ -221,6 +221,7 @@
 
 	// get job categories and cities
 	$smarty->assign('categories', get_categories());
+	$smarty->assign('categories_with_jobs', get_categories_with_jobs());
 	$smarty->assign('articles', get_articles());
 	$smarty->assign('navigation', get_navigation());
 

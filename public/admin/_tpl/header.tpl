@@ -60,9 +60,10 @@
 		<li><a {if $CURRENT_PAGE == 'jobs'}class="selected"{/if} href="{$BASE_URL_ADMIN}{$URL_JOBS}/all/">Active jobs</a>
 			<ul>
 				<li class="txt">In category: </li>
-				{section name=tmp loop=$categories}
-				<li id="{$categories[tmp].var_name}"><a href="{$BASE_URL_ADMIN}{$URL_JOBS}/{$categories[tmp].var_name}/">{$categories[tmp].name}</a></li>
-				{/section}
+				{section name=tmp loop=$categories_with_jobs}
+	      <li id="{$categories_with_jobs[tmp].var_name}"><a href="{$BASE_URL_ADMIN}{$URL_JOBS}/{$categories_with_jobs[tmp].var_name}/">{$categories_with_jobs[tmp].name}</a></li>
+	      {/section}
+				
 			</ul>
 		</li>
 		<li><a {if $CURRENT_PAGE == ''}class="selected"{/if} href="{$BASE_URL_ADMIN}">Inactive jobs</a></li>
