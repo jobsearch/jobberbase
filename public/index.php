@@ -198,7 +198,15 @@
 
 	if (SIDEBAR_SHOW_WHAT == 'categories')
 	{
-		$smarty->assign('jobs_count_all_categs', $job->GetJobsCountForAllCategs());
+    $myCategCount = $job->GetJobsCountForAllCategs();
+				
+		  foreach ($myCategCount as $index => $jobsPerCateg)
+		    {
+			   if ($jobsPerCateg['categ_count'] < 1)
+			  	unset($myCategCount[$index]);
+		    }
+		
+		$smarty->assign('jobs_count_all_categs', $myCategCount);	
 	}
 	else
 	{
